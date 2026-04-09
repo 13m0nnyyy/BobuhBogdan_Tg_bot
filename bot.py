@@ -17,7 +17,7 @@ async def start(message: Message):
 #команда help
 @dp.message(Command("help"))
 async def help_command(message: Message):
-    await message.answer("Ось що я вмію:\n/start - привітання👍\n/help - довідка✉️\n/about - про мене👌\n/joke - анекдот😂")
+    await message.answer("Ось що я вмію:\n/start - привітання👍\n/help - довідка✉️\n/about - про мене👌\n/joke - анекдот😂\n/bye - прощання🖐️")
 
 #команда about
 @dp.message(Command("about"))
@@ -28,6 +28,11 @@ async def about_command(message: Message):
 @dp.message(Command("joke"))
 async def joke_command(message: Message):
     await message.answer("Чому комп’ютер пішов у спортзал? Щоб прокачати свої байти!🤣😂")
+
+#команда bye
+@dp.message(Command("bye"))
+async def bye_command(message: Message):
+    await message.answer("Допобачення, гарного вам дня🖐️")
 
 # Запуск
 async def main():
