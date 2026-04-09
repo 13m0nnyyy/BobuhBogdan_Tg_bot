@@ -12,7 +12,7 @@ dp = Dispatcher()
 #обробник старту
 @dp.message(CommandStart())
 async def start(message: Message):
-    await message.answer("Привіт, я твій бот, напиши /help щоб дізнатись про мене🎉")
+    await message.answer("Привіт, я історичний бот, напиши /help щоб дізнатись про мене🎉")
 
 #команда help
 @dp.message(Command("help"))
@@ -42,6 +42,8 @@ async def echo_text(message: Message):
         await message.answer("вітаю вас!🖐️")
     elif "як справи" in text:
         await message.answer("У мене все добре, а у вас?😊")
+    elif "історія" in text:
+        await message.answer("8 жовтня 1408 року відбулась перша згадка Чернівців!👇")
     else:
         await message.answer("Вибач, не зрозумів повідомлення, я ще вчусь😯")
 
