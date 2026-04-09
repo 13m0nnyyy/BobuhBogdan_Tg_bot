@@ -35,6 +35,7 @@ async def bye_command(message: Message):
     await message.answer("Допобачення, гарного вам дня🖐️")
 
 #обробка звичайного тексту
+@dp.message()
 async def echo_text(message: Message):
     text = message.text.lower()
     if "привіт" in text:
@@ -43,6 +44,7 @@ async def echo_text(message: Message):
         await message.answer("У мене все добре, а у вас?😊")
     else:
         await message.answer("Вибач, не зрозумів повідомлення, я ще вчусь😯")
+
 # Запуск
 async def main():
     await dp.start_polling(bot)
