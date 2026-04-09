@@ -15,7 +15,12 @@ async def start_handler(message: Message):
 #команда help
 @dp.message(Command("help"))
 async def help_command(message: Message):
-    await message.answer("ось що я можу: /start - привітання👍"
+    await message.answer("ось що я можу: /start - привітання👍, /about - про бота🤞"
+
+#команда about
+@dp.message(Сommand("about"))
+async def about_command(message: Message):
+    await message.answer("Я створений Бобухом Богданом👌")
 
 async def main():
     await dp.start_polling(bot)
