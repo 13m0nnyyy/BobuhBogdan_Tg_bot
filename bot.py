@@ -1,31 +1,32 @@
 import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, Command
 
-#токен
+# Замініть токен на свій
 API_TOKEN = "8569352099:AAG68TPFnYk97NHwQhp46PIJQmY1pDio6is"
-dp=Dispatcher()
 
-#команда start
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher()
+
+# Обробник команди /start
 @dp.message(CommandStart())
-async def start_handler(message: Message):
-    await message.answer("Привіт, я твій бот, напиши /help щоб дізнатись про мене🎉(цей бот було створено Бобухом Богданом")
+async def start(message: Message):
+    await message.answer("Привіт, я твій бот, напиши /help щоб дізнатись про мене🎉")
 
-#команда help
+# Обробник команди /help
 @dp.message(Command("help"))
 async def help_command(message: Message):
-    await message.answer("ось що я можу: /start - привітання👍, /about - про бота🤞"
+    await message.answer("Ось що я вмію:\n/start - привітання👍\n/help - довідка✉️\n/about - про мене👌")
 
-#команда about
-@dp.message(Сommand("about"))
+# Обробник команди /about
+@dp.message(Command("about"))
 async def about_command(message: Message):
-    await message.answer("Я створений Бобухом Богданом👌")
+    await message.answer("Я був створений Бобухом Богданом📑")
 
+# Запуск
 async def main():
     await dp.start_polling(bot)
 
-if __name__ == '__main__':
-    asyncio.run(main))
-
-
+if __name__ == "__main__":
+    asyncio.run(main())
