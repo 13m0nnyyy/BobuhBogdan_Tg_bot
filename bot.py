@@ -48,6 +48,8 @@ async def echo_text(message: Message):
         await message.answer("Чому комп’ютер пішов у спортзал? Щоб прокачати свої байти!🤣😂")
     elif "мені сумно" in text:
         await message.answer("Не сумуй, все буде добре!😋")
+    elif "дякую" in text:
+        await message.answer("Будь ласка, був радий допомогти🫡")
     elif "історія" in text:
         await message.answer("8 жовтня 1408 року відбулась перша згадка Чернівців!👇")
     else:
