@@ -10,7 +10,7 @@ dp=Dispatcher()
 #команда start
 @dp.message(CommandStart())
 async def start_handler(message: Message):
-    await message.answer("Привіт, я твій бот, напиши /help щоб дізнатись про мене🎉")
+    await message.answer("Привіт, я твій бот, напиши /help щоб дізнатись про мене🎉(цей бот було створено Бобухом Богданом")
 
 #команда help
 @dp.message(Command("help"))
