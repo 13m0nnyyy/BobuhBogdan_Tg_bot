@@ -3,12 +3,19 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import Message
 from aiogram.filters import CommandStart
 
+#токен
 API_TOKEN = "8569352099:AAG68TPFnYk97NHwQhp46PIJQmY1pDio6is"
 dp=Dispatcher()
 
+#команда start
 @dp.message(CommandStart())
 async def start_handler(message: Message):
-    await message.answer("Привіт я твій перший бот")
+    await message.answer("Привіт, я твій бот, напиши /help щоб дізнатись про мене🎉")
+
+#команда help
+@dp.message(Command("help"))
+async def help_command(message: Message):
+    await message.answer("ось що я можу: /start - привітання👍"
 
 async def main():
     await dp.start_polling(bot)
