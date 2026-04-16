@@ -1,7 +1,9 @@
 import asyncio
-from aiogram import Bot, Dispatcher
-from aiogram.types import Message
-from aiogram.filters import CommandStart, Command
+from aiogram import Bot, Dispatcher, F
+from aiogram.types import Message, CallbackQuery
+from aiogram.filters import Command
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+
 
 #токен
 API_TOKEN = "8569352099:AAG68TPFnYk97NHwQhp46PIJQmY1pDio6is"
@@ -9,10 +11,38 @@ API_TOKEN = "8569352099:AAG68TPFnYk97NHwQhp46PIJQmY1pDio6is"
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
 
-#обробник старту
-@dp.message(CommandStart())
+#обробник старту з меню
+@dp.message(Command("start"))
 async def start(message: Message):
-    await message.answer("Привіт, я історичний бот, напиши /help щоб дізнатись про мене🎉")
+    kb = InlineKeyboardBuilder()
+    kb.button(text="Скажи Привіт🖐️", callback_data="say_hi")
+    kb.button(text="Жарт😂", callback_data="joke")
+    kb.button(text="Гід📑", callback_data="help")
+    kb.button(text="Хто створив🤞", callback_data="about")
+    kb.adjust(1)
+    await message.answer("Натисни кнопку нижче👇", reply_markup=kb.as_markup())
+
+#Кнопка привіт
+@dp.callback_query(F.data == "say_hi")
+async def say_hi(callback: CallbackQuery):
+    await callback.message.answer("Привіт, друже! 🌟")
+    await callback.answer()
+#кнопка анекдот
+@dp.callback_query(F.data == "joke")
+async def joke(callback: CallbackQuery):
+    await callback.message.answer("Чому Python не їде велосипедом? — Бо не має коліс! 😄")
+    await callback.answer()
+#кнопка хелп
+@dp.callback_query(F.data == "help")
+async def help(callback: CallbackQuery):
+    await callback.message.answer("Ось що я вмію:\n/start - привітання👍\n/help - довідка✉️\n/about - про мене👌\n/joke - анекдот😂\n/bye - прощання🖐Ось що я вмію:\n/start - привітання👍\n/help - довідка✉️\n/about - про мене👌\n/joke - анекдот😂\n/bye - прощання🖐")
+    await callback.answer()
+#Кнопка хто створив
+@dp.callback_query(F.data == "about")
+async def about(callback: CallbackQuery):
+    await callback.message.answer("️Я був створений Бобухом Богданом📑")
+    await callback.answer()
+
 
 #команда help
 @dp.message(Command("help"))
@@ -62,5 +92,3 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 
-
-#
