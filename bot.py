@@ -32,12 +32,12 @@ async def say_hi(callback: CallbackQuery):
 #кнопка анекдот
 @dp.callback_query(F.data == "joke")
 async def joke(callback: CallbackQuery):
-    await callback.message.answer("- Мамо, я хочу в Париж!\n - У нас є Париж вдома. \n Париж вдома: Чернівці, дощ, бруківка і пари в ЧНУ.")
+    await callback.message.answer("- Мамо, я хочу в Париж!\n- У нас є Париж вдома. \nПариж вдома: Чернівці, дощ, бруківка і пари в ЧНУ.")
     await callback.answer()
 #кнопка хелп1
 @dp.callback_query(F.data == "help1")
 async def help(callback: CallbackQuery):
-    await callback.message.answer("Ось що я вмію:\n/start - привітання👍\n/help - довідка✉️\n/quiz - міні вікторина👨‍🎓\n/about - про мене👌\n/joke - анекдот😂\n/bye - прощання🖐 \nА також я вмію обробляти звичайний текст,\n просто напиши мені: Привіт, Як справи, Дякую, Анекдот, Історія тощо😊")
+    await callback.message.answer("Ось що я вмію:\n/start - привітання👍\n/help - довідка✉️\n/quiz - міні вікторина👨‍🎓\n/about - про мене👌\n/joke - анекдот😂\n/bye - прощання🖐 \nА також я вмію обробляти звичайний текст,\nпросто напиши мені: Привіт, Як справи, Дякую, Анекдот, Історія тощо😊")
     await callback.answer()
 #Кнопка хто створив
 @dp.callback_query(F.data == "about")
@@ -95,7 +95,7 @@ async def back_to_start(callback: CallbackQuery):
 #--------------------------------------------команда хелп
 @dp.message(Command("help"))
 async def help_command(message: Message):
-    await message.answer("Ось що я вмію:\n/start - привітання👍\n/help - довідка✉️\n/quiz - міні вікторина👨‍🎓\n/about - про мене👌\n/joke - анекдот😂\n/bye - прощання🖐 \nА також я вмію обробляти звичайний текст,\n просто напиши мені: Привіт, Як справи, Дякую, Анекдот, Історія тощо😊")
+    await message.answer("Ось що я вмію:\n/start - привітання👍\n/help - довідка✉️\n/quiz - міні вікторина👨‍🎓\n/about - про мене👌\n/joke - анекдот😂\n/bye - прощання🖐 \nА також я вмію обробляти звичайний текст,\nпросто напиши мені: Привіт, Як справи, Дякую, Анекдот, Історія тощо😊")
 
 #команда about
 @dp.message(Command("about"))
