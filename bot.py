@@ -25,9 +25,8 @@ async def set_main_menu(bot: Bot):
 def get_reply_keyboard():
     builder = ReplyKeyboardBuilder()
     builder.row(KeyboardButton(text="Привіт 👋"), KeyboardButton(text="Жарт 😂"))
-    builder.row(KeyboardButton(text="Гід 📑"), KeyboardButton(text="Хто створив 🤞"))
+    builder.row(KeyboardButton(text="Гід 📑"), KeyboardButton(text="Вікторина 👨‍🎓")) # Ось вона!
     builder.row(KeyboardButton(text="Цікавий факт ✨"), KeyboardButton(text="Графік роботи 📈"))
-    builder.row(KeyboardButton(text="Вікторина 👨‍🎓")) # Тепер тут одна кнопка або додай іншу
     return builder.as_markup(resize_keyboard=True)
 
 #обробник старту з меню
@@ -201,6 +200,8 @@ async def echo_text(message: Message):
         await message.answer("Мій графік:\nПрацюю 24/7 🚀\nОхороняю твої дані 👮‍♂️")
     elif "вікторина" in text:
         await quiz_start(message)
+    elif "допобачення" in text:
+        await message.answer(f"Допобачення, {message.from_user.full_name}!")
     elif "дякую" in text:
         await message.answer("Будь ласка, був радий допомогти 🫡")
     else:
