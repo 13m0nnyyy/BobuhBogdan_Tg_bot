@@ -1,14 +1,34 @@
 import asyncio
 from aiogram import Bot, Dispatcher, F
-from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, BotCommand, KeyboardButton, ReplyKeyboardRemove
 from aiogram.filters import Command
-from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder, ReplyKeyboardMarkup
 
 #токен
 API_TOKEN = "8569352099:AAG68TPFnYk97NHwQhp46PIJQmY1pDio6is"
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
+
+async def set_main_menu(bot: Bot):
+    main_menu_commands = [
+        BotCommand(command="/start", description="Головне меню 🏠"),
+        BotCommand(command="/help", description="Гід по боту 📑"),
+        BotCommand(command="/quiz", description="Вікторина про місто 👨‍🎓"),
+        BotCommand(command="/about", description="Автор проекту 🤞"),
+        BotCommand(command="/joke", description="Розсміши мене 😂"),
+        BotCommand(command="/fact", description="Цікавий факт ✨"),
+        BotCommand(command="/bye", description="Прощання 🖐")
+    ]
+    await bot.set_my_commands(main_menu_commands)
+
+def get_reply_keyboard():
+    builder = ReplyKeyboardBuilder()
+    builder.row(KeyboardButton(text="Привіт 👋"), KeyboardButton(text="Жарт 😂"))
+    builder.row(KeyboardButton(text="Гід 📑"), KeyboardButton(text="Хто створив 🤞"))
+    builder.row(KeyboardButton(text="Цікавий факт ✨"), KeyboardButton(text="Графік роботи 📈"))
+    builder.row(KeyboardButton(text="Вікторина 👨‍🎓")) # Тепер тут одна кнопка або додай іншу
+    return builder.as_markup(resize_keyboard=True)
 
 #обробник старту з меню
 @dp.message(Command("start"))
@@ -22,12 +42,20 @@ async def start(message: Message):
     kb.button(text="Графік роботи📈", callback_data="graphik")
     kb.button(text="Налаштування🔧", callback_data="settings")
     kb.adjust(1)
-    await message.answer("Вітаю! Я історичний бот на тематику Чернівців! \nНатисни кнопку нижче👇", reply_markup=kb.as_markup())
+
+    main_reply_kb = get_reply_keyboard()
+
+    await message.answer(
+        "Вітаю! Я історичний бот на тематику Чернівців! \nНатисни кнопку нижче👇",
+        reply_markup=main_reply_kb
+    )
+
+    await message.answer("Швидке меню за категоріями:", reply_markup=kb.as_markup())
 
 #------------Кнопка привіт
 @dp.callback_query(F.data == "say_hi")
 async def say_hi(callback: CallbackQuery):
-    await callback.message.answer("Привіт, друже! 🌟")
+    await callback.message.answer(f"Привіт, {callback.from_user.full_name}! 🌟")
     await callback.answer()
 #кнопка анекдот
 @dp.callback_query(F.data == "joke")
@@ -55,19 +83,26 @@ async def about(callback: CallbackQuery):
     await callback.message.answer("️Мій графік:\nПрацюю 24/7🚀\nОхороняю твої дані👮‍♂️\nШифрую чати🔎")
     await callback.answer()
 
+
 @dp.callback_query(F.data == "settings")
 async def settings_handler(callback: CallbackQuery):
+
     settings_kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🔔 Сповіщення: Увімк.", callback_data="none")],
-        [InlineKeyboardButton(text="🌐 Мова системи: UA", callback_data="none")],
-        [InlineKeyboardButton(text="⬅️ Назад", callback_data="start_menu")]
+        [InlineKeyboardButton(text="⬅️ Повернутися до меню", callback_data="start_menu")]
     ])
 
     await callback.message.edit_text(
-        text="⚙️ **Параметри системи**\n\n"
-             "Версія бота: `1.0.4`\n"
-             "Локація сервера: `Chernivtsi, UA`\n"
-             "ID сесії: `044-812`",
+        text=(
+            "⚙️ **Параметри системи**\n\n"
+            "Статус профілю: `Активний` ✅\n"
+            "🔔 **Сповіщення:** `Увімкнено`\n"
+            "🌐 **Мова інтерфейсу:** `Українська (UA)`\n\n"
+            "--- --- --- --- ---\n"
+            "🔹 **Технічна інформація:**\n"
+            "• Версія бота: `1.0.4`\n"
+            "• Локація: `Chernivtsi, UA`\n"
+            "• ID сесії: `044-812`"
+        ),
         reply_markup=settings_kb,
         parse_mode="Markdown"
     )
@@ -110,7 +145,7 @@ async def joke_command(message: Message):
 #команда bye
 @dp.message(Command("bye"))
 async def bye_command(message: Message):
-    await message.answer("Допобачення, гарного вам дня🖐️")
+    await message.answer(f"Допобачення, {message.from_user.full_name}, гарного вам дня🖐️")
 
 
 #команда quiz
@@ -149,25 +184,31 @@ async def quiz_no(callback: CallbackQuery):
 @dp.message()
 async def echo_text(message: Message):
     text = message.text.lower()
-    if "привіт" in text:
-        await message.answer("вітаю вас!🖐️")
-    elif "як справи" in text:
-        await message.answer("У мене все добре, а у вас?😊")
-    elif "що ти вмієш" in text:
-        await message.answer("Я історичний бот, який виконує команди😉")
-    elif "анекдот" in text:
-        await message.answer("- Мамо, я хочу в Париж!\n - У нас є Париж вдома. \n Париж вдома: Чернівці, дощ, бруківка і пари в ЧНУ.")
-    elif "мені сумно" in text:
-        await message.answer("Не сумуй, все буде добре!😋")
-    elif "дякую" in text:
-        await message.answer("Будь ласка, був радий допомогти🫡")
-    elif "історія" in text:
-        await message.answer("8 жовтня 1408 року відбулась перша згадка Чернівців👇")
-    else:
-        await message.answer("Вибач, не зрозумів повідомлення, я ще вчусь😯")
 
+    if "привіт" in text:
+        await message.answer(f"Вітаю, {message.from_user.full_name}! 🖐️")
+    elif "жарт" in text or "анекдот" in text:
+        await message.answer(
+            "- Мамо, я хочу в Париж!\n- У нас є Париж вдома. \nПариж вдома: Чернівці, дощ, бруківка і пари в ЧНУ.")
+    elif "гід" in text or "що ти вмієш" in text:
+        await message.answer("Ось що я вмію:\n/start - привітання👍\n/help - довідка✉️\n/quiz - міні вікторина👨‍🎓\n/about - про мене👌\n/joke - анекдот😂\n/bye - прощання🖐 \nА також я вмію обробляти звичайний текст,\nпросто напиши мені: Привіт, Як справи, Дякую, Анекдот, Історія тощо😊")
+    elif "хто створив" in text or "автор" in text:
+        await message.answer("Я був створений Бобухом Богданом 📑")
+    elif "цікавий факт" in text:
+        await message.answer(
+            "Чернівці - це єдине місто в Україні, де університет (ЧНУ) внесений до списку спадщини ЮНЕСКО! 🎨")
+    elif "графік" in text:
+        await message.answer("Мій графік:\nПрацюю 24/7 🚀\nОхороняю твої дані 👮‍♂️")
+    elif "вікторина" in text:
+        await quiz_start(message)
+    elif "дякую" in text:
+        await message.answer("Будь ласка, був радий допомогти 🫡")
+    else:
+        await message.answer("Вибач, не зрозумів повідомлення. Спробуй скористатися кнопками меню! 😯")
 # Запуск
 async def main():
+    await set_main_menu(bot)
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
