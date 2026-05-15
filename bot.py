@@ -152,7 +152,7 @@ async def bye_command(message: Message):
 async def quiz_start(message: Message):
     kb = InlineKeyboardBuilder()
     kb.button(text="Ратуша", callback_data="q1_wrong")
-    kb.button(text="Університет (ЧНУ) 🏛️", callback_data="q1_correct")
+    kb.button(text="Університет (ЧНУ)", callback_data="q1_correct")
     kb.button(text="Муздрамтеатр", callback_data="q1_wrong")
     kb.button(text="Будинок-корабель", callback_data="q1_wrong")
     kb.adjust(1)
@@ -202,7 +202,7 @@ async def q2_yes(callback: CallbackQuery):
     await callback.answer("Її мили з милом і замітали трояндами!🌹")
 
     kb = InlineKeyboardBuilder()
-    kb.button(text="Франц Йосиф I 👑", callback_data="q3_correct")
+    kb.button(text="Франц Йосиф I", callback_data="q3_correct")
     kb.button(text="Тарас Шевченко", callback_data="q3_wrong")
     kb.button(text="Міхай Емінеску", callback_data="q3_wrong")
     kb.adjust(1)
