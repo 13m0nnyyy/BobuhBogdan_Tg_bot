@@ -147,38 +147,90 @@ async def bye_command(message: Message):
     await message.answer(f"Допобачення, {message.from_user.full_name}, гарного вам дня🖐️")
 
 
-#команда quiz
+#вікторина
 @dp.message(Command("quiz"))
 async def quiz_start(message: Message):
     kb = InlineKeyboardBuilder()
-
-    kb.button(text="Ратуша", callback_data="quiz_wrong")
-    kb.button(text="Університет (ЧНУ)", callback_data="quiz_correct")
-    kb.button(text="Муздрамтеатр", callback_data="quiz_wrong")
-    kb.button(text="Будинок-корабель", callback_data="quiz_wrong")
+    kb.button(text="Ратуша", callback_data="q1_wrong")
+    kb.button(text="Університет (ЧНУ) 🏛️", callback_data="q1_correct")
+    kb.button(text="Муздрамтеатр", callback_data="q1_wrong")
+    kb.button(text="Будинок-корабель", callback_data="q1_wrong")
     kb.adjust(1)
 
     await message.answer(
-        "📜 **Чернівецька вікторина:**\n\n"
-        "Яка будівля в Чернівцях внесена до списку світової спадщини ЮНЕСКО?👨‍🏫",
+        "📜 **Чернівецька вікторина (Питання 1/3):**\n\n"
+        "Яка будівля в Чернівцях внесена до списку світової спадщини ЮНЕСКО? 👨‍🏫",
         reply_markup=kb.as_markup(),
         parse_mode="Markdown"
     )
 
-#правильна
-@dp.callback_query(F.data == "quiz_correct")
-async def quiz_yes(callback: CallbackQuery):
+
+@dp.callback_query(F.data == "q1_wrong")
+async def q1_no(callback: CallbackQuery):
+    await callback.answer("Неправильно! Спробуй ще раз! ❌", show_alert=True)
+
+
+@dp.callback_query(F.data == "q1_correct")
+async def q1_yes(callback: CallbackQuery):
+    await callback.answer("Правильно! +1 до знань 🎓")
+
+    kb = InlineKeyboardBuilder()
+    kb.button(text="Панська", callback_data="q2_correct")
+    kb.button(text="Головна", callback_data="q2_wrong")
+    kb.button(text="Руська", callback_data="q2_wrong")
+    kb.button(text="Кобилянської", callback_data="q2_correct")
+    kb.adjust(1)
+
     await callback.message.edit_text(
-        "Правильно! ✅\n\nЦе Резиденція митрополитів Буковини і Далмації (нині ЧНУ).",
+        "✅ **Чудово!**\n\n"
+        "📜 **Чернівецька вікторина (Питання 2/3):**\n\n"
+        "Яку відому пішохідну вулицю Чернівців (нині Ольги Кобилянської) за австрійських часів підмітали букетами троянд? 🧹🌹",
+        reply_markup=kb.as_markup(),
+        parse_mode="Markdown"
+    )
+
+
+# питання 2
+@dp.callback_query(F.data == "q2_wrong")
+async def q2_no(callback: CallbackQuery):
+    await callback.answer("Ні, цю вулицю мили звичайними швабрами. Спробуй іншу! ❌", show_alert=True)
+
+
+
+@dp.callback_query(F.data == "q2_correct")
+async def q2_yes(callback: CallbackQuery):
+    await callback.answer("Її мили з милом і замітали трояндами!🌹")
+
+    kb = InlineKeyboardBuilder()
+    kb.button(text="Франц Йосиф I 👑", callback_data="q3_correct")
+    kb.button(text="Тарас Шевченко", callback_data="q3_wrong")
+    kb.button(text="Міхай Емінеску", callback_data="q3_wrong")
+    kb.adjust(1)
+
+    await callback.message.edit_text(
+        "🎉 **Фінальне питання:**\n\n"
+        "📜 **вікторина (Питання 3/3):**\n\n"
+        "Пам'ятник якому австрійському імператору за правління якого місто пережило 'золотий вік', встановлено у Чернівцях? 🏛️",
+        reply_markup=kb.as_markup(),
+        parse_mode="Markdown"
+    )
+
+
+#питання 3
+@dp.callback_query(F.data == "q3_wrong")
+async def q3_no(callback: CallbackQuery):
+    await callback.answer("не вгадав!!", show_alert=True)
+
+
+@dp.callback_query(F.data == "q3_correct")
+async def q3_yes(callback: CallbackQuery):
+    await callback.answer("ура! вікторину пройдено! 🥳")
+
+    await callback.message.edit_text(
+        "🏆 **Вітання! Ти пройшов всю вікторину!** ✅\n\n"
+        "Ти чудово знаєш історію та архітектуру нашого міста!",
         reply_markup=None
     )
-    await callback.answer("Вітаю! +1 до знань 🎓")
-
-#неправильна
-@dp.callback_query(F.data == "quiz_wrong")
-async def quiz_no(callback: CallbackQuery):
-    await callback.answer("Спробуй ще раз! ❌", show_alert=True)
-
 #-------------------------------------------------------обробка звичайного тексту
 @dp.message()
 async def echo_text(message: Message):
